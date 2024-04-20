@@ -1,17 +1,19 @@
 import axios from "axios";
-import { UserFormDataType, UserType } from "../types";
+import { UserFormDataType, UserType, TokenType, QuestionType } from "../types";
 
 const baseURL: string = ' https://cae-bookstore.herokuapp.com'
-const userEndpoint:string = '/users'
+const userEndpoint:string = '/user'
+const loginEndpoint: string = '/login'
+const questionEndpoint: string = '/question'
 
 const apiClientNoAuth = () => axios.create({
     baseURL: baseURL
 })
 
-const apiClientBasicAuth = (username:string, password:string) => axios.create({
+const apiClientBasicAuth = (email:string, password:string) => axios.create({
     baseURL: baseURL,
     headers: {
-        Authorization: 'Basic ' + btoa(username + ':' + password)
+        Authorization: 'Basic ' + btoa(email + ':' + password)
     }
 })
 
@@ -31,7 +33,7 @@ async function register(newUserData: UserFormDataType): Promise <APIResponse<Use
     let data;
     let error;
     try{
-        const response = await apiClientNoAuth(). post(userEndpoint, newUserData);
+        const response = await apiClientNoAuth().post(userEndpoint, newUserData);
         data=response.data
     } catch(err) {
         if (axios.isAxiosError(err)){
@@ -43,6 +45,41 @@ async function register(newUserData: UserFormDataType): Promise <APIResponse<Use
     return { data, error }
 }
 
+async function login(email: string, password:string): Promise <APIResponse<TokenType>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientBasicAuth(email,password).get(loginEndpoint);
+        data=response.data
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error =err.response?.data.error
+        } else {
+            error= "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+async function getPosts(token:string): Promise <APIResponse<QuestionType[]>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).get(questionEndpoint);
+        data=response.data
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error =err.response?.data.error
+        } else {
+            error= "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+
 export {
-    register
+    register,
+    login,
+    getPosts
 }
