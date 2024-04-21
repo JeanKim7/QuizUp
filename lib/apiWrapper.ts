@@ -1,5 +1,5 @@
 import axios from "axios";
-import { UserFormDataType, UserType, TokenType, QuestionType } from "../types";
+import { UserFormDataType, UserType, TokenType, QuestionType, QuestionFormDataType } from "../types";
 
 const baseURL: string = ' https://cae-bookstore.herokuapp.com'
 const userEndpoint:string = '/user'
@@ -134,6 +134,37 @@ async function getMyQuestions(token:string): Promise <APIResponse<responseObject
     return { data, error }
 }
 
+async function createNewQuestion(token:string, newQuestionData:QuestionFormDataType): Promise <APIResponse<string>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).post(questionEndpoint, newQuestionData);
+        data=response.data
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error =err.response?.data.error
+        } else {
+            error= "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+async function deleteQuestion(token:string, deleteQuestionID:string): Promise <APIResponse<string>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).delete(questionEndpoint + `/${deleteQuestionID}`);
+        data=response.data
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error =err.response?.data.error
+        } else {
+            error= "Something went wrong"
+        }
+    }
+    return { data, error }
+}
 
 export {
     register,
@@ -142,5 +173,6 @@ export {
     deleteUser,
     getMyQuestions,
     getAllQuestions,
-    
+    createNewQuestion,
+    deleteQuestion
 }

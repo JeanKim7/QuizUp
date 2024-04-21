@@ -112,7 +112,7 @@ export default function MyAccount({logUserOut}:MyAccountProps) {
                     Are you sure you want to delete your account? This action cannot be undone.
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant='secondary' onClick={closeModal}>Close</Button>
+                    <Button variant='secondary' onClick={closeModal}>Cancel</Button>
                     <Button variant='danger' onClick={handleDeleteClick}>Delete Account</Button>
                 </Modal.Footer>
             </Modal>

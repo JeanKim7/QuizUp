@@ -9,10 +9,11 @@ import { QuestionType } from '../types';
 import {getAllQuestions, getMyQuestions} from '../lib/apiWrapper'
 
 type HomeProps = {
-    isLoggedIn:boolean
+    isLoggedIn:boolean,
+    fetchQuestionData: boolean
 }
 
-export default function Home({isLoggedIn}:HomeProps) {
+export default function Home({isLoggedIn, fetchQuestionData}:HomeProps) {
 
     const [questions, setQuestions] = useState<QuestionType[]>([])
     const [myQuestionsOnly, setMyQuestionsOnly] = useState(false)
@@ -34,7 +35,7 @@ export default function Home({isLoggedIn}:HomeProps) {
             }
         }}
         fetchData()  
-    },[myQuestionsOnly]
+    },[myQuestionsOnly, fetchQuestionData]
     )
 
     const handleFilterClick = () => setMyQuestionsOnly(!myQuestionsOnly)

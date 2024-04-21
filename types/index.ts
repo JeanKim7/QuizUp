@@ -22,6 +22,11 @@ export type QuestionType ={
     author:string
 }
 
+export type QuestionFormDataType = {
+    question:string,
+    answer:string
+}
+
 export type TokenType = {
     token:string,
     tokenExpiration:string

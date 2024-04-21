@@ -7,10 +7,13 @@ import SignUp from '../views/SignUp'
 import Login from '../views/Login'
 import MyAccount from '../views/MyAccount'
 import MyQuestions from '../views/MyQuestions'
+import { QuestionFormDataType } from '../types';
+import { createNewQuestion, deleteQuestion } from '../lib/apiWrapper';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true: false)
-  
+  const [fetchQuestionData, setFetchQuestionData] = useState(true)
+
   const logUserIn=()=>{
     setIsLoggedIn(true)
   }
@@ -21,16 +24,37 @@ export default function App() {
     console.log("You have been logged out")
   }
 
+  const addNewQuestion = async (newQuestionData: QuestionFormDataType) =>{
+    const token =localStorage.getItem('token') || '';
+    const response = await createNewQuestion(token, newQuestionData)
+    if (response.error){
+      console.log(response.error)
+    } else if (response.data){
+      setFetchQuestionData(!fetchQuestionData)
+      console.log(response.data, "Your question has been created!")
+    }
+  }
+
+  const deleteQuestion1 = async (deleteQuestionID: string) =>{
+    const token = localStorage.getItem('token') || ''
+    const response = await deleteQuestion(token, deleteQuestionID)
+    if (response.error){
+        console.log(response.error)
+    } else if (response.data) {
+        console.log(response.data, "Your question has been deleted!")
+        setFetchQuestionData(!fetchQuestionData)
+    }}
+
   return (
   <>
-    <Navigation isLoggedIn={isLoggedIn} logUserOut={logUserOut}/>
+    <Navigation isLoggedIn={isLoggedIn} logUserOut={logUserOut} />
       <Container>
         <Routes>
-          <Route path='/' element ={<Home isLoggedIn={isLoggedIn}/>}/>
+          <Route path='/' element ={<Home fetchQuestionData={fetchQuestionData} isLoggedIn={isLoggedIn}/>}/>
           <Route path='/myaccount' element={<MyAccount logUserOut={logUserOut}/>}/>
           <Route path='/signup' element = {<SignUp/>} />
           <Route path ='/login' element = {<Login logUserIn={logUserIn}/>} />
-          <Route path = '/myquestions' element={<MyQuestions/>}/>
+          <Route path = '/myquestions' element={<MyQuestions addNewQuestion={addNewQuestion} deleteQuestion1={deleteQuestion1}/>}/>
         </Routes>
       </Container>
   </>
