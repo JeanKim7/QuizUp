@@ -8,7 +8,7 @@ import Login from '../views/Login'
 import MyAccount from '../views/MyAccount'
 import MyQuestions from '../views/MyQuestions'
 import { QuestionFormDataType } from '../types';
-import { createNewQuestion, deleteQuestion } from '../lib/apiWrapper';
+import { createNewQuestion, editQuestion, deleteQuestion } from '../lib/apiWrapper';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('token') ? true: false)
@@ -35,6 +35,17 @@ export default function App() {
     }
   }
 
+  const editQuestion1 = async (editQuestionID: string, editQuestionData: QuestionFormDataType) =>{
+    const token = localStorage.getItem('token') || ''
+    const response = await editQuestion(token, editQuestionID, editQuestionData)
+    if (response.error){
+        console.log(response.error)
+    } else if (response.data) {
+        console.log(response.data, "Your question has been edited!")
+        setFetchQuestionData(!fetchQuestionData)
+    }}
+
+
   const deleteQuestion1 = async (deleteQuestionID: string) =>{
     const token = localStorage.getItem('token') || ''
     const response = await deleteQuestion(token, deleteQuestionID)
@@ -54,7 +65,7 @@ export default function App() {
           <Route path='/myaccount' element={<MyAccount logUserOut={logUserOut}/>}/>
           <Route path='/signup' element = {<SignUp/>} />
           <Route path ='/login' element = {<Login logUserIn={logUserIn}/>} />
-          <Route path = '/myquestions' element={<MyQuestions addNewQuestion={addNewQuestion} deleteQuestion1={deleteQuestion1}/>}/>
+          <Route path = '/myquestions' element={<MyQuestions addNewQuestion={addNewQuestion} editQuestion1 = {editQuestion1} deleteQuestion1={deleteQuestion1}/>}/>
         </Routes>
       </Container>
   </>
