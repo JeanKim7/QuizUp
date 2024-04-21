@@ -4,9 +4,12 @@ import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import  InputGroup from "react-bootstrap/InputGroup";
 import Button  from "react-bootstrap/Button";
+import "bootstrap-icons/font/bootstrap-icons.css"
 import { register } from "../lib/apiWrapper";
 import {useNavigate } from 'react-router-dom'
 import { UserFormDataType } from "../types";
+
+
 
 export default function SignUp(){
     const navigate=useNavigate()

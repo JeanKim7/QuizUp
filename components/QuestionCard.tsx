@@ -10,10 +10,10 @@ export default function QuestionCard({question}: QuestionCardProps){
     
     
     return (
-        <Card>
+        <Card className='mt-3 p-3'>
             <Card.Title>{question.question}</Card.Title>
             <Card.Subtitle>Author: {question.author}</Card.Subtitle>
-            <Card.Body>{question.answer}</Card.Body>
+            <Card.Body>Answer: {question.answer}</Card.Body>
         </Card>
     )
 }

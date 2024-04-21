@@ -8,9 +8,11 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button'
 import { UserFormDataType } from '../types';
 
+type LoginProps = {
+    logUserIn:()=>void
+}
 
-
-export default function Login () {
+export default function Login ({logUserIn}:LoginProps) {
     const navigate =useNavigate()   
     const [seePassword, setSeePassword] = useState(false)
     
@@ -35,6 +37,7 @@ export default function Login () {
             const token=response.data!.token;
             localStorage.setItem('token', token);
             console.log("Logged In")
+            logUserIn()
             navigate('/')
         }
     }

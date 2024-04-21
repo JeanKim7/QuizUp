@@ -20,7 +20,7 @@ const apiClientBasicAuth = (email:string, password:string) => axios.create({
 const apiClientTokenAuth = (token:string) => axios.create({
     baseURL: baseURL,
     headers: {
-        Authorizatoin: 'Bearer ' + token
+        Authorization: 'Bearer ' + token
     }
 })
 
@@ -29,7 +29,7 @@ type APIResponse<T> = {
     error?:string
 }
 
-async function register(newUserData: UserFormDataType): Promise <APIResponse<UserType>> {
+async function register(newUserData: UserFormDataType): Promise <APIResponse<string>> {
     let data;
     let error;
     try{
@@ -44,6 +44,7 @@ async function register(newUserData: UserFormDataType): Promise <APIResponse<Use
     }
     return { data, error }
 }
+
 
 async function login(email: string, password:string): Promise <APIResponse<TokenType>> {
     let data;
@@ -61,11 +62,11 @@ async function login(email: string, password:string): Promise <APIResponse<Token
     return { data, error }
 }
 
-async function getPosts(token:string): Promise <APIResponse<QuestionType[]>> {
+async function editUser(token:string, editedUserData:Partial<UserType>): Promise <APIResponse<string>> {
     let data;
     let error;
     try{
-        const response = await apiClientTokenAuth(token).get(questionEndpoint);
+        const response = await apiClientTokenAuth(token).put(userEndpoint, editedUserData);
         data=response.data
     } catch(err) {
         if (axios.isAxiosError(err)){
@@ -77,7 +78,31 @@ async function getPosts(token:string): Promise <APIResponse<QuestionType[]>> {
     return { data, error }
 }
 
-async function getAllQuestions(): Promise <APIResponse<QuestionType[]>> {
+async function deleteUser(token:string): Promise <APIResponse<string>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).delete(userEndpoint);
+        data=response.data
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error =err.response?.data.error
+        } else {
+            error= "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
+
+
+
+
+type responseObject = {
+    questions: QuestionType[]
+}
+
+async function getAllQuestions(): Promise <APIResponse<responseObject>> {
     let data;
     let error;
     try{
@@ -93,10 +118,29 @@ async function getAllQuestions(): Promise <APIResponse<QuestionType[]>> {
     return { data, error }
 }
 
+async function getMyQuestions(token:string): Promise <APIResponse<responseObject>> {
+    let data;
+    let error;
+    try{
+        const response = await apiClientTokenAuth(token).get(questionEndpoint);
+        data=response.data
+    } catch(err) {
+        if (axios.isAxiosError(err)){
+            error =err.response?.data.error
+        } else {
+            error= "Something went wrong"
+        }
+    }
+    return { data, error }
+}
+
 
 export {
     register,
     login,
-    getPosts,
-    getAllQuestions
+    editUser,
+    deleteUser,
+    getMyQuestions,
+    getAllQuestions,
+    
 }
