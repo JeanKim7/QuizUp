@@ -84,7 +84,7 @@ export default function MyQuestions({addNewQuestion, editQuestion1, deleteQuesti
                                 <Form.Control name="question" placeholder="Enter your edited question" value = {editQuestionData.question} onChange = {handleEditInputChange}></Form.Control>
                                 <Form.Label htmlFor='Answer'>Answer</Form.Label>
                                 <Form.Control name="answer" placeholder="Enter your edited answer" value = {editQuestionData.answer} onChange = {handleEditInputChange}></Form.Control>
-                                <Button variant="success" type="submit">Create New Question</Button>
+                                <Button variant="success" type="submit">Edit Your Question</Button>
                             </Form>
                         </Accordion.Body>
                     </Accordion.Item>
